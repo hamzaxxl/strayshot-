@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the marketplace.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "facebookUrl": { "type": "string" },
+        "bio": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "ratingSum": { "type": "number" },
+        "ratingCount": { "type": "number" },
+        "averageRating": { "type": "number" },
+        "isBanned": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "role", "ratingSum", "ratingCount", "averageRating", "isBanned", "createdAt"]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "An account listing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "gameName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["active", "removed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "sellerId", "gameName", "title", "description", "images", "tags", "status", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review from one user to another.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reviewerId": { "type": "string" },
+        "targetUserId": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "removed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "reviewerId", "targetUserId", "rating", "comment", "status", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A comment on a listing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "listingId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "text": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "removed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "listingId", "authorId", "text", "status", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A notification for a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["review", "comment"] },
+        "sourceId": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "type", "sourceId", "message", "read", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles."
+    },
+    "/listings/{listingId}": {
+      "schema": { "$ref": "#/entities/Listing" },
+      "description": "Stores account listings."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Stores user reviews."
+    },
+    "/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/Comment" },
+      "description": "Stores comments on listings."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Stores user notifications."
+    }
+  }
+}
